@@ -1,31 +1,67 @@
-Just following https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF
+# GPU passthrough
 
-iommu=pt added to kernel parameters
+A collection of notes and scripts for passing through GPU to a VM.
+This is done mostly with Windows in mind.
 
-iommu_groups.sh copied
+Mostly just following [Arch Wiki on the topic](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF),
+with a wrapper here and there.
 
-gpu 10de:2786
-gpu audio 10de:22bc
+The configuration is Ryzen 3600 + RTX 4070, thus the instructions for IOMMU will be AMD specific (you may need more
+parameters for Intel, check the Wiki).
 
-packages:
-Install qemu-desktop, libvirt, edk2-ovmf, and virt-manager
+## Kernel parameters
 
-sudo virsh net-start default
+- `iommu=pt`, to prevent Linux from touching device that can't be passed through
 
+## Isolate the gpu on early boot level
 
-w11 installation
+### /etc/modprobe.d/vfio.conf
 
-tpm passthrough
+```
+options vfio-pci ids=10de:2786,10de:22bcs
+```
 
-isolate_cpu.sh
+### /etc/mkinitcpio.conf
 
-pipewire-jack
-#qemu-audio-pa
-modify user in /etc/libvirt/qemu.conf so it points to your USER
-restart libvirtd service
+```
+MODULES=(vfio_pci vfio vfio_iommu_type1)
+```
 
-sudo virsh domxml-to-native qemu-argv --xml win.xml
+### And finally regenerate the initramfs
 
-We care about vscsi, viostor (for normal drivers, not passthrough)
+```
+sudo mkinitcpio -P
+```
 
-During OOBE later on, press win + x, open deivce manager and install netkvm drivers for the ethernet controller
+## Installed packages
+
+The list may be inconclusive, as the packages from `virtualization` group from [arch_ansible](https://github.com/dezeroku/arch_ansible) are also installed.
+
+- qemu-desktop
+- libvirt
+- edk2-ovmf
+- virt-manager
+
+## Audio passthrough back to host (Pipewire + JACK)
+
+- modify `user` line in `/etc/libvirt/qemu.conf` so it points to your USER
+- restart libvirtd service
+
+## Drivers requires during Windows installation
+
+These must be installed from `virtio` ISO (obtainable with `setup.sh` to perform the installation.
+
+Storage drivers `viostor` and `vioscsi` must be loaded at the early stage of the installation.
+
+Network driver `netkvm` must be installed later on, when Windows tries to connect to network.
+At this stage you can press `Shift + F10` to get the cmd, which will allow you to press `win + e` and open
+the mounted ISO as CD drive. Then run the installer as usual. Alternatively press `Shift + x` to open the device manager
+and work from there.
+
+## Scripts
+
+These are present in `scripts` directory
+
+- `iommu_groups.sh` (copied over from Arch Wiki) for listing IOMMU groups
+- `setup.sh` for getting the required ISOs
+- `start.sh` (requires manual configuration) for automation of the binding, isolating, etc.

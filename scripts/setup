@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+SCRIPTS_DIR="$(readlink -f "$(dirname "$0")")"
+cd "${SCRIPTS_DIR}/.." || exit
+
+. "${SCRIPTS_DIR}/common.sh"
+
+function get_virtio_drivers() {
+	if [ ! -f "ISOs/virtio-win.iso" ]; then
+		echoerr "virtio ISO not found, downloading..."
+		wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso -O ISOs/virtio-win.iso
+	fi
+}
+
+mkdir -p ISOs
+
+get_virtio_drivers
