@@ -61,7 +61,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/home/dezeroku/gpu_passthrough/Win11_22H2_English_x64v2.iso'/>
+      <source file='/home/dezeroku/gpu_passthrough/ISOs/windows.iso'/>
       <target dev='sda' bus='sata'/>
       <readonly/>
       <boot order='1'/>
@@ -69,7 +69,7 @@
     </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/home/dezeroku/gpu_passthrough/virtio-win.iso'/>
+      <source file='/home/dezeroku/gpu_passthrough/ISOs/virtio-win.iso'/>
       <target dev='sdb' bus='sata'/>
       <readonly/>
       <address type='drive' controller='0' bus='0' target='0' unit='1'/>

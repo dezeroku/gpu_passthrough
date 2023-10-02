@@ -47,7 +47,7 @@ The list may be inconclusive, as the packages from `virtualization` group from [
 - modify `user` line in `/etc/libvirt/qemu.conf` so it points to your USER
 - restart libvirtd service
 
-## Drivers requires during Windows installation
+## Drivers required during Windows installation
 
 These must be installed from `virtio` ISO (obtainable with `setup.sh` to perform the installation.
 
@@ -62,6 +62,16 @@ and work from there.
 
 These are present in `scripts` directory
 
-- `iommu_groups.sh` (copied over from Arch Wiki) for listing IOMMU groups
-- `setup.sh` for getting the required ISOs
-- `start.sh` (requires manual configuration) for automation of the binding, isolating, etc.
+- `iommu_groups` (copied over from Arch Wiki) for listing IOMMU groups
+- `setup` for getting the required ISOs
+- `start` (requires manual configuration) for automation of the binding, isolating, etc.
+
+## XML configuration
+
+The `xmls` directory contains common configurations.
+
+Common requirements for these are:
+
+- `ISOs/virtio-win.iso` obtainable via `scripts/setup`
+- `ISOs/windows.iso` that you have to obtain yourself, the recommended way is to download directly from Microsoft.
+  The version used for testing was `Win11_22H2_English_x64v2.iso`, but it should work fine with other releases too
