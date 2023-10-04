@@ -61,7 +61,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/home/dezeroku/gpu_passthrough/ISOs/windows.iso'/>
+      <source file='$XML_TEMPLATE_REPO_PATH/ISOs/windows.iso'/>
       <target dev='sda' bus='sata'/>
       <readonly/>
       <boot order='1'/>
@@ -69,21 +69,21 @@
     </disk>
     <disk type='file' device='cdrom'>
       <driver name='qemu' type='raw'/>
-      <source file='/home/dezeroku/gpu_passthrough/ISOs/virtio-win.iso'/>
+      <source file='$XML_TEMPLATE_REPO_PATH/ISOs/virtio-win.iso'/>
       <target dev='sdb' bus='sata'/>
       <readonly/>
       <address type='drive' controller='0' bus='0' target='0' unit='1'/>
     </disk>
     <disk type='block' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native' discard='unmap'/>
-      <source dev='/dev/disk/by-id/ata-Samsung_SSD_860_EVO_1TB_S4X6NF0N312956V'/>
+      <source dev='/dev/disk/by-id/$XML_TEMPLATE_MAIN_DISK_ID'/>
       <target dev='vdc' bus='virtio'/>
       <boot order='2'/>
       <address type='pci' domain='0x0000' bus='0x08' slot='0x00' function='0x0'/>
     </disk>
     <disk type='block' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native' discard='unmap'/>
-      <source dev='/dev/disk/by-id/ata-Samsung_SSD_870_EVO_1TB_S75CNX0W352009E'/>
+      <source dev='/dev/disk/by-id/$XML_TEMPLATE_SECONDARY_DISK_ID'/>
       <target dev='vdd' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
     </disk>
@@ -181,8 +181,8 @@
       <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
     </controller>
     <interface type='network'>
-      <mac address='52:54:00:18:bf:5a'/>
-      <source network='default'/>
+      <mac address='$XML_TEMPLATE_MAC_ADDRESS'/>
+      <source network='$XML_TEMPLATE_NETWORK'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x0a' slot='0x00' function='0x0'/>
     </interface>
@@ -197,10 +197,10 @@
     <input type='mouse' bus='ps2'/>
     <input type='keyboard' bus='ps2'/>
     <input type='evdev'>
-      <source dev='/dev/input/by-id/usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse'/>
+      <source dev='/dev/input/by-id/$XML_TEMPLATE_MOUSE'/>
     </input>
     <input type='evdev'>
-      <source dev='/dev/input/by-id/usb-Corsair_CORSAIR_K100_RGB_AIR_WIRELESS_Ultra-Thin_Mechanical_Gaming_Keyb_F5001904603E77D2AA1B84290A00A01F-event-kbd' grab='all' grabToggle='ctrl-ctrl' repeat='on'/>
+      <source dev='/dev/input/by-id/$XML_TEMPLATE_KEYBOARD' grab='all' grabToggle='ctrl-ctrl' repeat='on'/>
     </input>
     <tpm model='tpm-tis'>
       <backend type='passthrough'>
@@ -211,8 +211,8 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x1b' function='0x0'/>
     </sound>
     <audio id='1' type='jack'>
-      <input clientName='vm-win' connectPorts='Antlion.*'/>
-      <output clientName='vm-win' connectPorts='BTunes.*'/>
+      <input clientName='$XML_TEMPLATE_AUDIO_CLIENT_NAME' connectPorts='$XML_TEMPLATE_AUDIO_INPUT_REGEX'/>
+      <output clientName='$XML_TEMPLATE_AUDIO_CLIENT_NAME' connectPorts='$XML_TEMPLATE_AUDIO_OUTPUT_REGEX'/>
     </audio>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
@@ -232,7 +232,7 @@
     </memballoon>
   </devices>
   <qemu:commandline>
-    <qemu:env name='PIPEWIRE_RUNTIME_DIR' value='/run/user/1000'/>
-    <qemu:env name='PIPEWIRE_LATENCY' value='32/48000'/>
+    <qemu:env name='PIPEWIRE_RUNTIME_DIR' value='$XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR'/>
+    <qemu:env name='PIPEWIRE_LATENCY' value='$XML_TEMPLATE_PIPEWIRE_LATENCY'/>
   </qemu:commandline>
 </domain>

@@ -3,6 +3,11 @@
 # These values are prepared for Ryzen 3600 and RTX 4070
 # Modify these accordingly
 
+# Note:
+# We can assume that this script is being sourced when pwd is set to
+# the root of this repo.
+# This is done in the proper init part in other scripts.
+
 # CONFIGURATION MUST-HAVES
 # lspci -nn to get the PCI_IDs and DEVICE_IDs
 export GPU_PCI_ID="0000:26:00.0"
@@ -30,6 +35,25 @@ export VM_NETWORK_NAME="default"
 export AUTORANDR_ENABLE="true"
 export AUTORANDR_DEFAULT="default"
 export AUTORANDR_PASSTHROUGH="gpu_passthrough"
+
+# Templating values for the XMLs
+# All the values prefixed with XML_TEMPLATE_ can be used within the XMLs
+export XML_TEMPLATE_REPO_PATH="$PWD"
+export XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR="/run/user/1000"
+export XML_TEMPLATE_PIPEWIRE_LATENCY="32/48000"
+# ls /dev/input/by-id/ , cat one of the files and see if it prints something when you use the input device
+# then you'll know that's the correct one
+export XML_TEMPLATE_MOUSE="usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse"
+export XML_TEMPLATE_KEYBOARD="usb-Corsair_CORSAIR_K100_RGB_AIR_WIRELESS_Ultra-Thin_Mechanical_Gaming_Keyb_F5001904603E77D2AA1B84290A00A01F-event-kbd"
+
+export XML_TEMPLATE_AUDIO_CLIENT_NAME="vm-win"
+export XML_TEMPLATE_AUDIO_INPUT_REGEX="Antlion.*"
+export XML_TEMPLATE_AUDIO_OUTPUT_REGEX="BTunes.*"
+export XML_TEMPLATE_MAC_ADDRESS="52:54:00:18:bf:5a"
+export XML_TEMPLATE_NETWORK="${VM_NETWORK_NAME}"
+# ls /dev/disk/by-id/
+export XML_TEMPLATE_MAIN_DISK_ID="ata-Samsung_SSD_860_EVO_1TB_S4X6NF0N312956V"
+export XML_TEMPLATE_SECONDARY_DISK_ID="ata-Samsung_SSD_870_EVO_1TB_S75CNX0W352009E"
 
 # Some sanity checks, don't edit
 export VM_CONFIG="xmls/${VM_CONFIG}.xml"
