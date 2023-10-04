@@ -9,9 +9,69 @@ function get_virtio_drivers() {
 	if [ ! -f "ISOs/virtio-win.iso" ]; then
 		echoerr "virtio ISO not found, downloading..."
 		wget https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso -O ISOs/virtio-win.iso
+	else
+		echoerr "virtio ISO already in place"
 	fi
 }
 
-mkdir -p ISOs
+function check_win_iso() {
+	if [ ! -f "ISOs/windows.iso" ]; then
+		echoerr "windows ISO (ISOs/windows.iso) not found"
+		echoerr "Please obtain it yourself and put under the above location"
+		return 1
+	else
+		echoerr "windows ISO already in place"
+	fi
+}
 
+function define_vm() {
+	local xml_file
+	xml_file="$1"
+
+	sudo virsh define "${xml_file}"
+}
+
+function import_vm() {
+	local templated_vm_config
+	templated_vm_config="$(mktemp)"
+	template_xml "${VM_CONFIG}" "${templated_vm_config}"
+
+	local live_config
+	live_config="$(mktemp)"
+
+	if get_vm_config "${VM_NAME}" "${live_config}"; then
+		echoerr "VM already exists"
+		if check_vm_config_matches_template "${VM_NAME}" "${templated_vm_config}"; then
+			echoerr "VM matches the XML config"
+			return 0
+		else
+			echoerr "VM doesn't match the XML config, diff above"
+			while true; do
+				read -rp "Do you wish to override the existing VM? [y/n] " yn
+				case $yn in
+				[Yy]*)
+					echo "Overriding"
+					break
+					;;
+				[Nn]*)
+					echo "Not overriding"
+					return 0
+					;;
+				*) echo "Please answer yes or no." ;;
+				esac
+			done
+		fi
+	else
+		echoerr "VM doesn't exist, importing"
+	fi
+
+	define_vm "${templated_vm_config}"
+}
+
+check_sudo
+
+mkdir -p ISOs
 get_virtio_drivers
+check_win_iso
+
+import_vm

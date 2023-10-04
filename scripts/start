@@ -20,11 +20,6 @@ cd "${SCRIPTS_DIR}/.." || exit
 # Set to true if you're running tests with a different XML
 IGNORE_CONFIG_DIFF="${IGNORE_CONFIG_DIFF:-false}"
 
-# This function is just for a prettier sudo prompt
-check_sudo() { sudo true; }
-sudo_quiet_tee() { sudo tee "$@" 1>/dev/null; }
-quiet_tee() { tee "$@" 1>/dev/null; }
-
 function get_used_driver() {
 	local device_id
 	device_id="$1"
@@ -101,21 +96,11 @@ function set_cpus_for_systemd() {
 }
 
 function sanity_checks() {
-	# Check if the configuration matches the stored XML
-	local vm_config_real
-	vm_config_real="$(mktemp)"
-	if ! sudo virsh dumpxml "${VM_NAME}" | quiet_tee "${vm_config_real}"; then
-		echo "Failed to check the XML of ${VM_NAME}"
-		echo "Did you remember to run scripts/setup first?"
-		exit 1
-	fi
+	get_vm_config "${VM_NAME}" ""
 
-	local templated_vm_config
-	templated_vm_config="$(mktemp)"
-	template_xml "${VM_CONFIG}" "${templated_vm_config}"
-
-	if ! diff --ignore-blank-lines "${templated_vm_config}" "${vm_config_real}"; then
-		echo "${VM_CONFIG} does not match with the config of ${VM_NAME}"
+	if ! check_vm_config_matches_template "${VM_NAME}" "${VM_CONFIG}"; then
+		echoerr "VM config does not match the XML"
+		echoerr "Either run scripts/setup or run with IGNORE_CONFIG_DIFF=true"
 		if [[ "${IGNORE_CONFIG_DIFF}" == "true" ]]; then
 			echo "Proceeding because of IGNORE_CONFIG_DIFF=true"
 		else
