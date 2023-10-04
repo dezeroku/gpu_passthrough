@@ -134,15 +134,6 @@ function pre_vm() {
 	if ! sudo virsh net-info "${VM_NETWORK_NAME}" | grep Active | grep -q yes; then
 		sudo virsh net-start "${VM_NETWORK_NAME}"
 	fi
-
-	if [[ "${AUTORANDR_ENABLE}" == "true" ]]; then
-		autorandr -l "${AUTORANDR_PASSTHROUGH}"
-		AUTORANDR_STATE="$(systemctl is-enabled autorandr)"
-		if [[ "${AUTORANDR_STATE}" == "enabled" ]]; then
-			echoerr "Temporarily disabling autorandr service"
-			sudo systemctl disable autorandr
-		fi
-	fi
 }
 
 function post_vm() {
@@ -174,6 +165,16 @@ function start_vm() {
 }
 
 function wait_for_vm_to_shut_down() {
+	# Switch the screen
+	if [[ "${AUTORANDR_ENABLE}" == "true" ]]; then
+		autorandr -l "${AUTORANDR_PASSTHROUGH}"
+		AUTORANDR_STATE="$(systemctl is-enabled autorandr)"
+		if [[ "${AUTORANDR_STATE}" == "enabled" ]]; then
+			echoerr "Temporarily disabling autorandr service"
+			sudo systemctl disable autorandr
+		fi
+	fi
+
 	while true; do
 		sudo virsh dominfo "${VM_NAME}" | grep State | grep -q "shut off" && return
 		sleep 5
