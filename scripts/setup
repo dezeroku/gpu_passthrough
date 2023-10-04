@@ -3,7 +3,7 @@
 SCRIPTS_DIR="$(readlink -f "$(dirname "$0")")"
 cd "${SCRIPTS_DIR}/.." || exit
 
-. "${SCRIPTS_DIR}/common.sh"
+. "${SCRIPTS_DIR}/bootstrap.sh"
 
 function get_virtio_drivers() {
 	if [ ! -f "ISOs/virtio-win.iso" ]; then
