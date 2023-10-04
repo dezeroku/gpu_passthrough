@@ -22,6 +22,7 @@ export ALL_CPUS="0-11"
 # CONFIGURATION OPTIONAL
 #VM_NAME="win11-install-testing"
 export VM_NAME="win11-install-scsi"
+export VM_CONFIG="win-scsi"
 export VM_NETWORK_NAME="default"
 
 # Autorandr is used here as it's easier to write hooks for it
@@ -29,3 +30,10 @@ export VM_NETWORK_NAME="default"
 export AUTORANDR_ENABLE="true"
 export AUTORANDR_DEFAULT="default"
 export AUTORANDR_PASSTHROUGH="gpu_passthrough"
+
+# Some sanity checks, don't edit
+export VM_CONFIG="xmls/${VM_CONFIG}.xml"
+if [ ! -f "${VM_CONFIG}" ]; then
+	echo "${VM_CONFIG} not found, are you sure you chose the proper configuration?"
+	exit 1
+fi

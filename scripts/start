@@ -18,9 +18,13 @@ cd "${SCRIPTS_DIR}/.." || exit
 . "${SCRIPTS_DIR}/common.sh"
 . "${SCRIPTS_DIR}/values.sh"
 
+# Set to true if you're running tests with a different XML
+IGNORE_CONFIG_DIFF="${IGNORE_CONFIG_DIFF:-false}"
+
 # This function is just for a prettier sudo prompt
 check_sudo() { sudo true; }
 sudo_quiet_tee() { sudo tee "$@" 1>/dev/null; }
+quiet_tee() { tee "$@" 1>/dev/null; }
 
 function get_used_driver() {
 	local device_id
@@ -97,6 +101,27 @@ function set_cpus_for_systemd() {
 	sudo systemctl set-property --runtime -- init.scope AllowedCPUs="${cores}"
 }
 
+function sanity_checks() {
+	# Check if the configuration matches the stored XML
+	local vm_config_real
+	vm_config_real="$(mktemp)"
+	if ! sudo virsh dumpxml "${VM_NAME}" | quiet_tee "${vm_config_real}"; then
+		echo "Failed to check the XML of ${VM_NAME}"
+		echo "Did you remember to run scripts/setup first?"
+		exit 1
+	fi
+
+	if ! diff --ignore-blank-lines "${VM_CONFIG}" "${vm_config_real}"; then
+		echo "${VM_CONFIG} does not match with the config of ${VM_NAME}"
+		if [[ "${IGNORE_CONFIG_DIFF}" == "true" ]]; then
+			echo "Proceeding because of IGNORE_CONFIG_DIFF=true"
+		else
+			echo "Stopping..."
+			exit 1
+		fi
+	fi
+}
+
 function pre_vm() {
 	# Isolate GPU
 	driver_bind "vfio-pci" "${GPU_PCI_ID}" "${GPU_DEVICE_ID}"
@@ -156,9 +181,11 @@ function wait_for_vm_to_shut_down() {
 }
 
 check_sudo
+
+sanity_checks
 pre_vm
 
-#start_vm
+start_vm
 wait_for_vm_to_shut_down
 
 echo
