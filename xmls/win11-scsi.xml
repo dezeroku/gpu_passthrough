@@ -1,6 +1,6 @@
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
-  <name>win11-scsi</name>
-  <uuid>21b52158-9427-45d4-b06c-963319bd809b</uuid>
+  <name>$XML_TEMPLATE_VM_NAME</name>
+  <uuid>$XML_TEMPLATE_VM_UUID</uuid>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/11"/>

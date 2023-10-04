@@ -96,7 +96,11 @@ function set_cpus_for_systemd() {
 }
 
 function sanity_checks() {
-	get_vm_config "${VM_NAME}" ""
+	if ! get_vm_config "${VM_NAME}" ""; then
+		echoerr "Couldn't obtain config for vm ${VM_NAME}"
+		echoerr "Did you remember to run scripts/setup first?"
+		exit 1
+	fi
 
 	if ! check_vm_config_matches_template "${VM_NAME}" "${VM_CONFIG}"; then
 		echoerr "VM config does not match the XML"

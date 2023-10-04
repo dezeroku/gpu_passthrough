@@ -12,3 +12,4 @@ if ! check_tool "autorandr"; then
 fi
 
 check_tool virsh
+check_tool uuidgen

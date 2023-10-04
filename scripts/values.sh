@@ -29,6 +29,10 @@ export ALL_CPUS="0-11"
 export VM_NAME="win11-scsi"
 export VM_CONFIG="win11-scsi"
 export VM_NETWORK_NAME="default"
+# This snippet generates a unique ID that's deterministic given a name
+# so unique-per-name
+VM_UUID="$(uuidgen --namespace @oid --md5 --name "${VM_NAME}")"
+export VM_UUID
 
 # Autorandr is used here as it's easier to write hooks for it
 # The presets have to be defined manually
@@ -38,7 +42,9 @@ export AUTORANDR_PASSTHROUGH="gpu_passthrough"
 
 # Templating values for the XMLs
 # All the values prefixed with XML_TEMPLATE_ can be used within the XMLs
-export XML_TEMPLATE_REPO_PATH="$PWD"
+export XML_TEMPLATE_REPO_PATH="${PWD}"
+export XML_TEMPLATE_VM_NAME="${VM_NAME}"
+export XML_TEMPLATE_VM_UUID="${VM_UUID}"
 export XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR="/run/user/1000"
 export XML_TEMPLATE_PIPEWIRE_LATENCY="32/48000"
 # ls /dev/input/by-id/ , cat one of the files and see if it prints something when you use the input device

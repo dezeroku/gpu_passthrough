@@ -48,8 +48,6 @@ function get_vm_config() {
 	vm_name="$1"
 	file_location="${2:-$(mktemp)}"
 	if ! sudo virsh dumpxml "${vm_name}" | quiet_tee "${file_location}"; then
-		echo "Failed to check the XML of ${vm_name}"
-		echo "Did you remember to run scripts/setup first?"
 		return 1
 	fi
 }
