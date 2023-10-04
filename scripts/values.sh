@@ -21,8 +21,8 @@ export ALL_CPUS="0-11"
 
 # CONFIGURATION OPTIONAL
 #VM_NAME="win11-install-testing"
-export VM_NAME="win11-install-scsi"
-export VM_CONFIG="win-scsi"
+export VM_NAME="win11-scsi"
+export VM_CONFIG="win11-scsi"
 export VM_NETWORK_NAME="default"
 
 # Autorandr is used here as it's easier to write hooks for it
