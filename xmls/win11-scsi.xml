@@ -6,8 +6,8 @@
       <libosinfo:os id="http://microsoft.com/win/11"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory unit='KiB'>16777216</memory>
-  <currentMemory unit='KiB'>16777216</currentMemory>
+  <memory unit='KiB'>$XML_TEMPLATE_VM_MEMORY_KB</memory>
+  <currentMemory unit='KiB'>$XML_TEMPLATE_VM_MEMORY_KB</currentMemory>
   <vcpu placement='static'>6</vcpu>
   <iothreads>1</iothreads>
   <cputune>

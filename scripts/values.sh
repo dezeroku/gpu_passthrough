@@ -45,13 +45,14 @@ export AUTORANDR_PASSTHROUGH="gpu_passthrough"
 export XML_TEMPLATE_REPO_PATH="${PWD}"
 export XML_TEMPLATE_VM_NAME="${VM_NAME}"
 export XML_TEMPLATE_VM_UUID="${VM_UUID}"
+export XML_TEMPLATE_VM_MEMORY_KB="16777216"
+
 export XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR="/run/user/1000"
 export XML_TEMPLATE_PIPEWIRE_LATENCY="32/48000"
 # ls /dev/input/by-id/ , cat one of the files and see if it prints something when you use the input device
 # then you'll know that's the correct one
 export XML_TEMPLATE_MOUSE="usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse"
 export XML_TEMPLATE_KEYBOARD="usb-Corsair_CORSAIR_K100_RGB_AIR_WIRELESS_Ultra-Thin_Mechanical_Gaming_Keyb_F5001904603E77D2AA1B84290A00A01F-event-kbd"
-
 export XML_TEMPLATE_AUDIO_CLIENT_NAME="vm-win"
 export XML_TEMPLATE_AUDIO_INPUT_REGEX="Antlion.*"
 export XML_TEMPLATE_AUDIO_OUTPUT_REGEX="BTunes.*"
