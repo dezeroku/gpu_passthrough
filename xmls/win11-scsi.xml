@@ -64,7 +64,7 @@
       <source file='$XML_TEMPLATE_REPO_PATH/ISOs/windows.iso'/>
       <target dev='sda' bus='sata'/>
       <readonly/>
-      <boot order='1'/>
+      <boot order='2'/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
     <disk type='file' device='cdrom'>
@@ -78,7 +78,7 @@
       <driver name='qemu' type='raw' cache='none' io='native' discard='unmap'/>
       <source dev='/dev/disk/by-id/$XML_TEMPLATE_MAIN_DISK_ID'/>
       <target dev='vdc' bus='virtio'/>
-      <boot order='2'/>
+      <boot order='1'/>
       <address type='pci' domain='0x0000' bus='0x08' slot='0x00' function='0x0'/>
     </disk>
     <disk type='block' device='disk'>
