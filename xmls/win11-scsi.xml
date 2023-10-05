@@ -27,7 +27,7 @@
       <feature enabled='yes' name='secure-boot'/>
     </firmware>
     <loader readonly='yes' secure='yes' type='pflash'>/usr/share/edk2/x64/OVMF_CODE.secboot.fd</loader>
-    <nvram template='/usr/share/edk2/x64/OVMF_VARS.fd'>/var/lib/libvirt/qemu/nvram/win11-install-scsi_VARS.fd</nvram>
+    <nvram template='/usr/share/edk2/x64/OVMF_VARS.fd'>/var/lib/libvirt/qemu/nvram/$XML_TEMPLATE_VM_NAME-VARS.fd</nvram>
   </os>
   <features>
     <acpi/>
