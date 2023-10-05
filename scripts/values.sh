@@ -48,7 +48,7 @@ export XML_TEMPLATE_VM_UUID="${VM_UUID}"
 export XML_TEMPLATE_VM_MEMORY_KB="16777216"
 
 export XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR="/run/user/1000"
-export XML_TEMPLATE_PIPEWIRE_LATENCY="32/48000"
+export XML_TEMPLATE_PIPEWIRE_LATENCY="128/48000"
 # ls /dev/input/by-id/ , cat one of the files and see if it prints something when you use the input device
 # then you'll know that's the correct one
 export XML_TEMPLATE_MOUSE="usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse"
