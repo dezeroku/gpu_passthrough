@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPTS_DIR="$(readlink -f "$(dirname "$0")")"
+cd "${SCRIPTS_DIR}/.." || exit
+
+. "${SCRIPTS_DIR}/bootstrap.sh"
+
+driver_bind "${GPU_DRIVER}" "${GPU_PCI_ID}" "${GPU_DEVICE_ID}"
+driver_bind "${GPU_AUDIO_DRIVER}" "${GPU_AUDIO_PCI_ID}" "${GPU_AUDIO_DEVICE_ID}"

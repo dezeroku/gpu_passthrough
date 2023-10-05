@@ -66,6 +66,8 @@ Look at the file contents for further instructions.
 - `iommu_groups` (copied over from Arch Wiki) for listing IOMMU groups
 - `setup` for getting the required ISOs and setting up the VM
 - `start` for automation of the binding, isolating, VM startup, etc.
+- `isolate_gpu` small scriptlet for binding GPU to `vfio-pci` driver
+- `unisolate_gpu` small scriptlet for binding GPU to its defined driver
 
 ## Host configuration
 
