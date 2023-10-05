@@ -24,6 +24,9 @@ export GPU_AUDIO_DRIVER="snd_hda_intel"
 export HOST_CPUS="0,1,2,6,7,8"
 export ALL_CPUS="0-11"
 
+# How much memory the VM gets
+export VM_MEMORY_KB="16777216"
+
 # CONFIGURATION OPTIONAL
 #VM_NAME="win11-install-testing"
 export VM_NAME="win11-scsi"
@@ -45,7 +48,7 @@ export AUTORANDR_PASSTHROUGH="gpu_passthrough"
 export XML_TEMPLATE_REPO_PATH="${PWD}"
 export XML_TEMPLATE_VM_NAME="${VM_NAME}"
 export XML_TEMPLATE_VM_UUID="${VM_UUID}"
-export XML_TEMPLATE_VM_MEMORY_KB="16777216"
+export XML_TEMPLATE_VM_MEMORY_KB="${VM_MEMORY_KB}"
 
 export XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR="/run/user/1000"
 export XML_TEMPLATE_PIPEWIRE_LATENCY="128/48000"

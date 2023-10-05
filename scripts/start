@@ -17,8 +17,16 @@ cd "${SCRIPTS_DIR}/.." || exit
 
 . "${SCRIPTS_DIR}/bootstrap.sh"
 
-# Set to true if you're running tests with a different XML
+# The size is in KB
+HUGEPAGES_SIZE="$((2 * 1024))"
+HUGEPAGES_PATH="/sys/kernel/mm/hugepages/hugepages-${HUGEPAGES_SIZE}kB/nr_hugepages"
+
+# Value of this is total_vm_memory / single_hugepage_size and should equal to half of the memory you set
+# e.g. for 8G set we should allocate 4096 2MB pages
+HUGEPAGES="$((VM_MEMORY_KB / HUGEPAGES_SIZE))"
+
 IGNORE_CONFIG_DIFF="${IGNORE_CONFIG_DIFF:-false}"
+IGNORE_HUGEPAGES_ALLOCATION="${IGNORE_HUGEPAGES_ALLOCATION:-false}"
 
 function sanity_checks() {
 	if ! get_vm_config "${VM_NAME}" ""; then
@@ -39,6 +47,48 @@ function sanity_checks() {
 	fi
 }
 
+function allocate_hugepages() {
+	# Shamelessly taken from https://www.reddit.com/r/VFIO/comments/dmie86/comment/f513vii/?context=3
+	# and modified to respect the values defined in the repo + Arch Wiki path for 2MB hugepages allocation
+	# + some formatting changes
+
+	local alloc_pages
+	local tries
+
+	echoerr "Allocating ${HUGEPAGES} hugepages..."
+	echo $HUGEPAGES | sudo_quiet_tee "${HUGEPAGES_PATH}"
+	alloc_pages="$(cat "${HUGEPAGES_PATH}")"
+
+	tries=0
+	while ((alloc_pages != HUGEPAGES && tries < 1000)); do
+		# We kinda like our cache, let's not do it unless really needed
+		#echo 3 > /proc/sys/vm/drop_caches
+		echo 1 | sudo_quiet_tee /proc/sys/vm/compact_memory
+		echo "$HUGEPAGES" | sudo_quiet_tee "${HUGEPAGES_PATH}"
+		alloc_pages="$(cat "${HUGEPAGES_PATH}")"
+		tries=$((tries + 1))
+		echoerr "Try: ${tries} Got ${alloc_pages} / ${HUGEPAGES} pages"
+	done
+
+	if [ "$alloc_pages" -ne "$HUGEPAGES" ]; then
+		echoerr "Not able to allocate hugepages"
+		echoerr "Either resolve the issue or run with IGNORE_HUGEPAGES_ALLOCATION=true"
+		if [[ ! "${IGNORE_HUGEPAGES_ALLOCATION}" == "true" ]]; then
+			echoerr "Proceeding because of IGNORE_HUGEPAGES_ALLOCATION=true"
+		else
+			echo 0 | sudo_quiet_tee "${HUGEPAGES_PATH}"
+			echoerr "Stopping..."
+			return 1
+		fi
+	fi
+}
+
+function free_hugepages() {
+	echoerr "Freeing hugepages..."
+	echo 0 | sudo_quiet_tee "${HUGEPAGES_PATH}"
+	echoerr "Done"
+}
+
 function pre_vm() {
 	# Isolate GPU
 	driver_bind "vfio-pci" "${GPU_PCI_ID}" "${GPU_DEVICE_ID}"
@@ -51,6 +101,9 @@ function pre_vm() {
 	if ! sudo virsh net-info "${VM_NETWORK_NAME}" | grep Active | grep -q yes; then
 		sudo virsh net-start "${VM_NETWORK_NAME}"
 	fi
+
+	# Prepare hugepages
+	allocate_hugepages
 }
 
 function post_vm() {
@@ -66,6 +119,10 @@ function post_vm() {
 
 	# Stop the network
 	sudo virsh net-destroy "${VM_NETWORK_NAME}"
+
+	# Free hugepages
+	# TODO: is this really needed?
+	free_hugepages
 
 	# Enable the screen again
 	if [[ "${AUTORANDR_ENABLE}" == "true" ]]; then

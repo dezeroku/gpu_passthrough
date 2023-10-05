@@ -8,6 +8,9 @@
   </metadata>
   <memory unit='KiB'>$XML_TEMPLATE_VM_MEMORY_KB</memory>
   <currentMemory unit='KiB'>$XML_TEMPLATE_VM_MEMORY_KB</currentMemory>
+  <memoryBacking>
+    <hugepages/>
+  </memoryBacking>
   <vcpu placement='static'>6</vcpu>
   <iothreads>1</iothreads>
   <cputune>
