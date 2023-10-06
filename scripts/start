@@ -83,7 +83,7 @@ function allocate_hugepages() {
 		fi
 	fi
 
-	echoerr "Allocation successful"
+	echoerr "Done"
 }
 
 function free_hugepages() {
@@ -138,6 +138,7 @@ function post_vm() {
 }
 
 function start_vm() {
+	echoerr "Starting the VM"
 	sudo virsh start "${VM_NAME}"
 }
 
