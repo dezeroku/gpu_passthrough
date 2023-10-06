@@ -103,9 +103,6 @@ function driver_bind() {
 	device_id="$3"
 
 	echoerr "Binding ${pci_id} [${device_id}] to ${driver_name}"
-	if ! lsmod | grep -q "${driver_name}"; then
-		sudo modprobe "${driver_name}"
-	fi
 
 	local current_driver
 	current_driver="$(get_used_driver "${device_id}")"
@@ -118,6 +115,10 @@ function driver_bind() {
 			echo "${pci_id}" | sudo_quiet_tee "/sys/bus/pci/devices/${pci_id}/driver/unbind"
 
 			wait_for_driver_bind "${device_id}" ""
+		fi
+
+		if ! lsmod | grep -q "${driver_name}"; then
+			sudo modprobe "${driver_name}"
 		fi
 
 		# TODO: remove the top if, snd_hda_intel needs some more work with the new_id file it seems
