@@ -75,12 +75,15 @@ function allocate_hugepages() {
 		echoerr "Either resolve the issue or run with IGNORE_HUGEPAGES_ALLOCATION=true"
 		if [[ ! "${IGNORE_HUGEPAGES_ALLOCATION}" == "true" ]]; then
 			echoerr "Proceeding because of IGNORE_HUGEPAGES_ALLOCATION=true"
+			return
 		else
 			echo 0 | sudo_quiet_tee "${HUGEPAGES_PATH}"
 			echoerr "Stopping..."
 			return 1
 		fi
 	fi
+
+	echoerr "Allocation successful"
 }
 
 function free_hugepages() {
@@ -142,7 +145,8 @@ function wait_for_vm_to_shut_down() {
 	# Switch the screen
 	if [[ "${AUTORANDR_ENABLE}" == "true" ]]; then
 		autorandr -l "${AUTORANDR_PASSTHROUGH}"
-		AUTORANDR_STATE="$(systemctl is-enabled autorandr)"
+		# A dummy true to make sure script doesn't fail here
+		AUTORANDR_STATE="$(systemctl is-enabled autorandr)" || true
 		if [[ "${AUTORANDR_STATE}" == "enabled" ]]; then
 			echoerr "Temporarily disabling autorandr service"
 			sudo systemctl disable autorandr
