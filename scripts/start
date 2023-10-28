@@ -27,6 +27,7 @@ HUGEPAGES="$((VM_MEMORY_KB / HUGEPAGES_SIZE))"
 
 IGNORE_CONFIG_DIFF="${IGNORE_CONFIG_DIFF:-false}"
 IGNORE_HUGEPAGES_ALLOCATION="${IGNORE_HUGEPAGES_ALLOCATION:-false}"
+CLEANUP_ONLY="${CLEANUP_ONLY:-false}"
 
 function sanity_checks() {
 	if ! get_vm_config "${VM_NAME}" ""; then
@@ -163,9 +164,12 @@ function wait_for_vm_to_shut_down() {
 check_sudo
 sanity_checks
 
-pre_vm
+if [[ "${CLEANUP_ONLY}" != "true" ]]; then
+	pre_vm
 
-start_vm
+	start_vm
+fi
+
 wait_for_vm_to_shut_down
 
 echo
