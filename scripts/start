@@ -173,4 +173,9 @@ fi
 wait_for_vm_to_shut_down
 
 echo
-post_vm
+
+# A really dumb way to retry the cleanup if needed
+if ! post_vm; then
+	sleep 5
+	post_vm
+fi
