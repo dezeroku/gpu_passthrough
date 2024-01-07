@@ -37,12 +37,6 @@ export VM_NETWORK_NAME="default"
 VM_UUID="$(uuidgen --namespace @oid --md5 --name "${VM_NAME}")"
 export VM_UUID
 
-# Autorandr is used here as it's easier to write hooks for it
-# The presets have to be defined manually
-export AUTORANDR_ENABLE="true"
-export AUTORANDR_DEFAULT="default"
-export AUTORANDR_PASSTHROUGH="gpu_passthrough"
-
 # Templating values for the XMLs
 # All the values prefixed with XML_TEMPLATE_ can be used within the XMLs
 export XML_TEMPLATE_REPO_PATH="${PWD}"

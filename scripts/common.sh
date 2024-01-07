@@ -20,6 +20,16 @@ check_tool() {
 	fi
 }
 
+run_user_script() {
+	local userscript
+	userscript="$1"
+	if [ -f "$userscript" ]; then
+		$userscript
+	else
+		echoerr "User script $userscript not found"
+	fi
+}
+
 template_xml() {
 	local xml_file
 	local target_file

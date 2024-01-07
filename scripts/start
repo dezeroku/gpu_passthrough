@@ -8,14 +8,12 @@ set -euo pipefail
 # * isolating CPU cores from the host
 # * (optionally) disconnecting the monitor, so it automatically picks up passthrough
 
-# SCRIPT
-# To be used by the script, don't modify
-AUTORANDR_STATE=""
-
 SCRIPTS_DIR="$(readlink -f "$(dirname "$0")")"
 cd "${SCRIPTS_DIR}/.." || exit
 
 . "${SCRIPTS_DIR}/bootstrap.sh"
+
+USERSCRIPTS_DIR="${SCRIPTS_DIR}/user"
 
 # The size is in KB
 HUGEPAGES_SIZE="$((2 * 1024))"
@@ -108,6 +106,8 @@ function pre_vm() {
 
 	# Prepare hugepages
 	allocate_hugepages
+
+	run_user_script "${USERSCRIPTS_DIR}/pre-vm-startup"
 }
 
 function post_vm() {
@@ -128,14 +128,7 @@ function post_vm() {
 	# TODO: is this really needed?
 	free_hugepages
 
-	# Enable the screen again
-	if [[ "${AUTORANDR_ENABLE}" == "true" ]]; then
-		autorandr -l "${AUTORANDR_DEFAULT}"
-		if [[ "${AUTORANDR_STATE}" == "enabled" ]]; then
-			echoerr "Reenabling autorandr service"
-			sudo systemctl enable autorandr
-		fi
-	fi
+	run_user_script "${USERSCRIPTS_DIR}/post-vm-shutdown"
 }
 
 function start_vm() {
@@ -144,16 +137,7 @@ function start_vm() {
 }
 
 function wait_for_vm_to_shut_down() {
-	# Switch the screen
-	if [[ "${AUTORANDR_ENABLE}" == "true" ]]; then
-		autorandr -l "${AUTORANDR_PASSTHROUGH}"
-		# A dummy true to make sure script doesn't fail here
-		AUTORANDR_STATE="$(systemctl is-enabled autorandr)" || true
-		if [[ "${AUTORANDR_STATE}" == "enabled" ]]; then
-			echoerr "Temporarily disabling autorandr service"
-			sudo systemctl disable autorandr
-		fi
-	fi
+	run_user_script "${USERSCRIPTS_DIR}/post-vm-startup"
 
 	while true; do
 		sudo virsh dominfo "${VM_NAME}" | grep State | grep -q "shut off" && return

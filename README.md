@@ -17,7 +17,7 @@ With scripts available here it's possible to:
   - start the virtual network
   - isolate the GPU / load the drivers back after VM shutdown
   - isolate the CPUs from host
-  - switch the Xorg outputs (via `autorandr`)
+  - run custom user scripts
 
 ## Usual workflow
 
@@ -38,10 +38,6 @@ What's configurable there:
 Notable things that you CAN NOT set through the values file and require manual intervention (editing XML directly) are at the moment:
 
 - CPU pinning (that's one of the most important things to do, don't overlook it)
-
-(Optionally) Prepare `autorandr` profiles for switching the screens.
-By default the `default` profile should have all the screens enabled and `gpu_passthrough` profile should disable the output on which you want display the content with pass-through GPU.
-The names of the profiles are customisable in `scripts/values.sh`, whole feature can be disable with the `AUTORANDR_ENABLE=false` option.
 
 Then run `scripts/setup` to create a VM.
 

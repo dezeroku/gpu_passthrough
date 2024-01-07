@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Switch the screen
+kanshictl switch gpu_passthrough
