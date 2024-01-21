@@ -60,6 +60,9 @@ export XML_TEMPLATE_NETWORK="${VM_NETWORK_NAME}"
 # ls /dev/disk/by-id/
 export XML_TEMPLATE_MAIN_DISK_ID="ata-Samsung_SSD_860_EVO_1TB_S4X6NF0N312956V"
 export XML_TEMPLATE_SECONDARY_DISK_ID="ata-Samsung_SSD_870_EVO_1TB_S75CNX0W352009E"
+# lsusb
+# TP-Link UB500 Bluetooth Adapter
+export XML_TEMPLATE_USB_DEVICES="2357:0604"
 
 export DOCKER_GOMPLATE_IMAGE="hairyhenderson/gomplate:v3.11-alpine"
 

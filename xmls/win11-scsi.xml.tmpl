@@ -233,6 +233,17 @@
       </source>
       <address type='pci' domain='0x0000' bus='0x07' slot='0x00' function='0x0'/>
     </hostdev>
+{{range $index, $element := ( .Env.XML_TEMPLATE_USB_DEVICES | strings.Split " " ) }}
+{{ $vendor_id := index ($element | strings.Split ":") 0 }}
+{{ $product_id := index ($element | strings.Split ":") 1 }}
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <vendor id='0x{{ $vendor_id }}'/>
+        <product id='0x{{ $product_id }}'/>
+      </source>
+      <address type='usb' bus='0' port='{{ math.Add $index 1 }}'/>
+    </hostdev>
+{{end}}
     <watchdog model='itco' action='reset'/>
     <memballoon model='virtio'>
       <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
