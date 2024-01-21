@@ -59,8 +59,10 @@ export XML_TEMPLATE_NETWORK="${VM_NETWORK_NAME}"
 export XML_TEMPLATE_MAIN_DISK_ID="ata-Samsung_SSD_860_EVO_1TB_S4X6NF0N312956V"
 export XML_TEMPLATE_SECONDARY_DISK_ID="ata-Samsung_SSD_870_EVO_1TB_S75CNX0W352009E"
 
+export DOCKER_GOMPLATE_IMAGE="hairyhenderson/gomplate:v3.11-alpine"
+
 # Some sanity checks, don't edit
-export VM_CONFIG="xmls/${VM_CONFIG}.xml"
+export VM_CONFIG="xmls/${VM_CONFIG}.xml.tmpl"
 if [ ! -f "${VM_CONFIG}" ]; then
 	echo "${VM_CONFIG} not found, are you sure you chose the proper configuration?"
 	exit 1

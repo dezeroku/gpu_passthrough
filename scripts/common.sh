@@ -39,10 +39,13 @@ template_xml() {
 	local tmp_file
 	tmp_file="$(mktemp)"
 
-	# A fancy one liner to get a list of env variables that start with XML_TEMPLATE_
-	# and add a $ sign at the beginning of every one, so they are understood by envsubst
-	template_variables="$(env | grep "^XML_TEMPLATE_" | cut -d "=" -f1 | sed -e 's/^/$/' | xargs)"
-	envsubst "\'${template_variables}\'" <"${xml_file}" >"${tmp_file}"
+	# Dump the local environment variables that matter
+	# so configuration options pass through
+	local env_file
+	env_file="$(mktemp)"
+	env | grep "^XML_TEMPLATE_" >"${env_file}"
+
+	docker run --env-file "${env_file}" -i "${DOCKER_GOMPLATE_IMAGE}" <"${xml_file}" >"${tmp_file}"
 	if ! command_output="$(virt-xml-validate "${tmp_file}" 2>&1)"; then
 		echo "templated XML validation failed"
 		echo "${command_output}"

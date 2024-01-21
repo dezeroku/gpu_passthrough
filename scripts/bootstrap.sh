@@ -5,3 +5,5 @@
 
 check_tool virsh
 check_tool uuidgen
+# For gomplate
+check_tool docker
