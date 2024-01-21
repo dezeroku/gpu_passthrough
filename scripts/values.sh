@@ -48,8 +48,10 @@ export XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR="/run/user/1000"
 export XML_TEMPLATE_PIPEWIRE_LATENCY="128/48000"
 # ls /dev/input/by-id/ , cat one of the files and see if it prints something when you use the input device
 # then you'll know that's the correct one
-export XML_TEMPLATE_MOUSE="usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse"
-export XML_TEMPLATE_KEYBOARD="usb-Corsair_CORSAIR_K100_RGB_AIR_WIRELESS_Ultra-Thin_Mechanical_Gaming_Keyb_F5001904603E77D2AA1B84290A00A01F-event-kbd"
+export XML_TEMPLATE_MICE="usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse"
+# Pass the wired connection and wireless adapter at the same time
+# as the USB connector has a tendency to disconnect from time to time
+export XML_TEMPLATE_KEYBOARDS="usb-Corsair_CORSAIR_K100_RGB_AIR_WIRELESS_Ultra-Thin_Mechanical_Gaming_Keyb_F5001904603E77D2AA1B84290A00A01F-event-kbd usb-Corsair_CORSAIR_SLIPSTREAM_WIRELESS_USB_Receiver_A7A0A0AE02C6DDC3-if03-event-kbd"
 export XML_TEMPLATE_AUDIO_CLIENT_NAME="vm-win"
 export XML_TEMPLATE_AUDIO_INPUT_REGEX="HyperX Cloud III.*"
 export XML_TEMPLATE_AUDIO_OUTPUT_REGEX="HyperX Cloud III.*"

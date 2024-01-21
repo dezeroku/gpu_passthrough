@@ -199,12 +199,16 @@
     </console>
     <input type='mouse' bus='ps2'/>
     <input type='keyboard' bus='ps2'/>
+{{range ( .Env.XML_TEMPLATE_MICE | strings.Split " " ) }}
     <input type='evdev'>
-      <source dev='/dev/input/by-id/{{ .Env.XML_TEMPLATE_MOUSE }}'/>
+      <source dev='/dev/input/by-id/{{ . }}'/>
     </input>
+{{end}}
+{{range ( .Env.XML_TEMPLATE_KEYBOARDS | strings.Split " " ) }}
     <input type='evdev'>
-      <source dev='/dev/input/by-id/{{ .Env.XML_TEMPLATE_KEYBOARD }}' grab='all' grabToggle='ctrl-ctrl' repeat='on'/>
+      <source dev='/dev/input/by-id/{{ . }}' grab='all' grabToggle='ctrl-ctrl' repeat='on'/>
     </input>
+{{end}}
     <tpm model='tpm-tis'>
       <backend type='passthrough'>
         <device path='/dev/tpm0'/>
