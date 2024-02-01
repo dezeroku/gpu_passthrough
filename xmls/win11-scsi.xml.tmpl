@@ -79,14 +79,14 @@
     </disk>
     <disk type='block' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native' discard='unmap'/>
-      <source dev='/dev/disk/by-id/{{ .Env.XML_TEMPLATE_MAIN_DISK_ID }}'/>
+      <source dev='/dev/disk/by-id/{{ .config.disks.main_id }}'/>
       <target dev='vdc' bus='virtio'/>
       <boot order='1'/>
       <address type='pci' domain='0x0000' bus='0x08' slot='0x00' function='0x0'/>
     </disk>
     <disk type='block' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native' discard='unmap'/>
-      <source dev='/dev/disk/by-id/{{ .Env.XML_TEMPLATE_SECONDARY_DISK_ID }}'/>
+      <source dev='/dev/disk/by-id/{{ .config.disks.secondary_id }}'/>
       <target dev='vdd' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
     </disk>
@@ -184,7 +184,7 @@
       <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
     </controller>
     <interface type='network'>
-      <mac address='{{ .Env.XML_TEMPLATE_MAC_ADDRESS }}'/>
+      <mac address='{{ .config.network.mac_address }}'/>
       <source network='{{ .Env.XML_TEMPLATE_NETWORK }}'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x0a' slot='0x00' function='0x0'/>
@@ -199,12 +199,12 @@
     </console>
     <input type='mouse' bus='ps2'/>
     <input type='keyboard' bus='ps2'/>
-{{range ( .Env.XML_TEMPLATE_MICE | strings.Split " " ) }}
+{{range .config.mice }}
     <input type='evdev'>
       <source dev='/dev/input/by-id/{{ . }}'/>
     </input>
 {{end}}
-{{range ( .Env.XML_TEMPLATE_KEYBOARDS | strings.Split " " ) }}
+{{range .config.keyboards }}
     <input type='evdev'>
       <source dev='/dev/input/by-id/{{ . }}' grab='all' grabToggle='ctrl-ctrl' repeat='on'/>
     </input>
@@ -218,8 +218,8 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x1b' function='0x0'/>
     </sound>
     <audio id='1' type='jack'>
-      <input clientName='{{ .Env.XML_TEMPLATE_AUDIO_CLIENT_NAME }}' connectPorts='{{ .Env.XML_TEMPLATE_AUDIO_INPUT_REGEX }}'/>
-      <output clientName='{{ .Env.XML_TEMPLATE_AUDIO_CLIENT_NAME }}' connectPorts='{{ .Env.XML_TEMPLATE_AUDIO_OUTPUT_REGEX }}'/>
+      <input clientName='{{ .config.audio.client_name }}' connectPorts='{{ .config.audio.input_regex }}'/>
+      <output clientName='{{ .config.audio.client_name }}' connectPorts='{{ .config.audio.output_regex }}'/>
     </audio>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
@@ -233,7 +233,7 @@
       </source>
       <address type='pci' domain='0x0000' bus='0x07' slot='0x00' function='0x0'/>
     </hostdev>
-{{range $index, $element := ( .Env.XML_TEMPLATE_USB_DEVICES | strings.Split " " ) }}
+{{range $index, $element := .config.usb_devices }}
 {{ $vendor_id := index ($element | strings.Split ":") 0 }}
 {{ $product_id := index ($element | strings.Split ":") 1 }}
     <hostdev mode='subsystem' type='usb' managed='yes'>
@@ -250,7 +250,7 @@
     </memballoon>
   </devices>
   <qemu:commandline>
-    <qemu:env name='PIPEWIRE_RUNTIME_DIR' value='{{ .Env.XML_TEMPLATE_PIPEWIRE_RUNTIME_DIR }}'/>
-    <qemu:env name='PIPEWIRE_LATENCY' value='{{ .Env.XML_TEMPLATE_PIPEWIRE_LATENCY }}'/>
+    <qemu:env name='PIPEWIRE_RUNTIME_DIR' value='{{ .config.audio.pipewire.runtime_dir }}'/>
+    <qemu:env name='PIPEWIRE_LATENCY' value='{{ .config.audio.pipewire.latency }}'/>
   </qemu:commandline>
 </domain>

@@ -45,7 +45,7 @@ template_xml() {
 	env_file="$(mktemp)"
 	env | grep "^XML_TEMPLATE_" >"${env_file}"
 
-	docker run --env-file "${env_file}" -i "${DOCKER_GOMPLATE_IMAGE}" <"${xml_file}" >"${tmp_file}"
+	docker run -v "${SCRIPTS_DIR}/../vm_config.yaml:/config/vm_config.yaml" --env-file "${env_file}" -i "${DOCKER_GOMPLATE_IMAGE}" -c 'config=/config/vm_config.yaml' <"${xml_file}" >"${tmp_file}"
 	if ! command_output="$(virt-xml-validate "${tmp_file}" 2>&1)"; then
 		echo "templated XML validation failed"
 		echo "${command_output}"

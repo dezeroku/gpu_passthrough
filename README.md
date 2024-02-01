@@ -10,7 +10,7 @@ with a bash wrapper here and there.
 
 With scripts available here it's possible to:
 
-- create the VM from XML config parametrized with `scripts/values.sh`
+- create the VM from XML config parametrized with `scripts/values.sh` and `vm_config.yaml`
 - detect changes between the "live" VM and XML config
 - apply the above if desired, so the XML config overrides the "live" VM (git is the single source of truth)
 - perform automatic pre/post tasks for the vm:

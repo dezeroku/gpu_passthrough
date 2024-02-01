@@ -1,0 +1,32 @@
+# Config is partially kept here and in scripts/values.sh
+# ls /dev/input/by-id/ , cat one of the files and see if it prints something when you use the input device
+# then you'll know that's the correct one
+mice:
+  - usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse
+
+keyboards:
+  # Pass the wired connection and wireless adapter at the same time
+  # as the USB connector has a tendency to disconnect from time to time
+  - usb-Corsair_CORSAIR_K100_RGB_AIR_WIRELESS_Ultra-Thin_Mechanical_Gaming_Keyb_F5001904603E77D2AA1B84290A00A01F-event-kbd
+  - usb-Corsair_CORSAIR_SLIPSTREAM_WIRELESS_USB_Receiver_A7A0A0AE02C6DDC3-if03-event-kbd
+
+audio:
+  client_name: vm-win
+  input_regex: HyperX Cloud III.*
+  output_regex: HyperX Cloud III.*
+  pipewire:
+    runtime_dir: /run/user/1000
+    latency: 128/48000
+
+network:
+  mac_address: 52:54:00:18:bf:5a
+
+disks:
+  # ls /dev/disk/by-id/
+  main_id: ata-Samsung_SSD_860_EVO_1TB_S4X6NF0N312956V
+  secondary_id: ata-Samsung_SSD_870_EVO_1TB_S75CNX0W352009E
+
+# lsusb
+usb_devices:
+  # TP-Link UB500 Bluetooth Adapter
+  - 2357:0604
