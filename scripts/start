@@ -92,6 +92,12 @@ function free_hugepages() {
 }
 
 function pre_vm() {
+	# Remember the drivers that are used currently
+	# to reuse them after the VM is shut down
+	# This overrides the scripts/values.sh provided values
+	GPU_DRIVER="$(get_used_driver "${GPU_DEVICE_ID}")"
+	GPU_AUDIO_DRIVER="$(get_used_driver "${GPU_AUDIO_DEVICE_ID}")"
+
 	# Isolate GPU
 	driver_bind "vfio-pci" "${GPU_PCI_ID}" "${GPU_DEVICE_ID}"
 	driver_bind "vfio-pci" "${GPU_AUDIO_PCI_ID}" "${GPU_AUDIO_DEVICE_ID}"
