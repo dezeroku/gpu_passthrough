@@ -12,7 +12,7 @@ keyboards:
 
 audio:
   client_name: vm-win
-  input_regex: HyperX Cloud III.*
+  input_regex: HyperX Cloud III Wireless Mono
   output_regex: HyperX Cloud III.*
   pipewire:
     runtime_dir: /run/user/1000
