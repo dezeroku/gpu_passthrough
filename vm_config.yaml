@@ -3,6 +3,7 @@
 # then you'll know that's the correct one
 mice:
   - usb-Razer_Razer_Viper_V2_Pro_000000000000-event-mouse
+  - usb-Logitech_USB_Receiver-if01-event-mouse
 
 keyboards:
   # Pass the wired connection and wireless adapter at the same time
