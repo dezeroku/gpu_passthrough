@@ -82,7 +82,7 @@ parameters for Intel, check the Wiki).
 options vfio-pci ids=10de:2786,10de:22bcs
 ```
 
-#### /etc/mkinitcpio.conf
+#### /etc/mkinitcpio.conf.d/vfio.conf
 
 ```
 MODULES=(vfio_pci vfio vfio_iommu_type1)
