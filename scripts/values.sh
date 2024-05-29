@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# These values are prepared for Ryzen 3600 and RTX 4070
+# These values are prepared for Ryzen 3600 and RTX 4080 Super
 # Modify these accordingly
 
 # Note:
@@ -13,8 +13,8 @@
 export GPU_PCI_ID="0000:26:00.0"
 export GPU_AUDIO_PCI_ID="0000:26:00.1"
 
-export GPU_DEVICE_ID="10de:2786"
-export GPU_AUDIO_DEVICE_ID="10de:22bc"
+export GPU_DEVICE_ID="10de:2702"
+export GPU_AUDIO_DEVICE_ID="10de:22bb"
 
 export GPU_DRIVER="nvidia"
 export GPU_AUDIO_DRIVER="snd_hda_intel"

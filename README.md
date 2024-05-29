@@ -67,7 +67,7 @@ Look at the file contents for further instructions.
 
 ## Host configuration
 
-The configuration is AMD Ryzen 3600 + RTX 4070, thus the instructions for IOMMU will be AMD specific (you may need more
+The configuration is AMD Ryzen 3600 + RTX 4080 Super, thus the instructions for IOMMU will be AMD specific (you may need more
 parameters for Intel, check the Wiki).
 
 ### Kernel parameters
@@ -79,7 +79,7 @@ parameters for Intel, check the Wiki).
 #### /etc/modprobe.d/vfio.conf
 
 ```
-options vfio-pci ids=10de:2786,10de:22bcs
+options vfio-pci ids=10de:2702,10de:22bb
 ```
 
 #### /etc/mkinitcpio.conf.d/vfio.conf
